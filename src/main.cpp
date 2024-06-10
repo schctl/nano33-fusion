@@ -4,7 +4,6 @@
 #include "Fusion.h"
 
 FusionAhrs ahrs;
-unsigned long last_t;
 
 void setup() {
   Serial.begin(9600);
@@ -28,21 +27,26 @@ void loop() {
     IMU.readMagneticField(mag.axis.x, mag.axis.y, mag.axis.z);
 
   if (IMU.gyroscopeAvailable()) {
-    IMU.readGyroscope(mag.axis.x, mag.axis.y, mag.axis.z);
-
-    unsigned long dt = millis() - last_t;
+    IMU.readGyroscope(gyr.axis.x, gyr.axis.y, gyr.axis.z);
     
-    FusionAhrsUpdate(&ahrs, gyr, acc, mag, dt);
-
-    const FusionEuler euler = FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs));
-
-    Serial.print("Roll: ");
-    Serial.print(euler.angle.roll);
-    Serial.print(" Pitch: ");
-    Serial.print(euler.angle.pitch);
-    Serial.print(" Yaw: ");
-    Serial.println(euler.angle.yaw);
-    Serial.println();
+    Serial.print(-acc.axis.x);
+    Serial.print(" ");
+    Serial.print(-acc.axis.y);
+    Serial.print(" ");
+    Serial.print(acc.axis.z);
+    Serial.print(" ");
+    Serial.print(-mag.axis.x);
+    Serial.print(" ");
+    Serial.print(mag.axis.y);
+    Serial.print(" ");
+    Serial.print(-mag.axis.z);
+    Serial.print(" ");
+    Serial.print(gyr.axis.x);
+    Serial.print(" ");
+    Serial.print(-gyr.axis.y);
+    Serial.print(" ");
+    Serial.print(gyr.axis.z);
+    Serial.print("\r\n");
   }
 
   delay(150);
